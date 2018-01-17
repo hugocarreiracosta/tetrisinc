@@ -19,14 +19,15 @@ typedef struct tela_ {
 typedef struct peca_ {
     int linha;
     int coluna;
-    int iMovimento;
     int qtMovimentos;
     char ** peca;
     char * movimentos;
+    int movimentosIndice;
 }peca;
 
 void sleepTela(int segundos){
     sleep(segundos);
+    system("clear");
 }
 
 void imprimirTela(tela * t){
@@ -41,8 +42,6 @@ void imprimirTela(tela * t){
     }
     
     sleepTela(t->sleep);
-
-    system("clear");
 }
 
 void leDimensoes(tela * t){
@@ -116,10 +115,10 @@ void desalocaPeca(peca * p){
     
 }
 
-// funcoes acima ja foram revisadas
-
 void inserirPeca(peca *p, tela *t){
+    
     int i, j;
+    
     //inserindo peça na tela
     for(i = 0; i < 3; i++){
         for(j = 0; j < 3; j++){
@@ -128,9 +127,11 @@ void inserirPeca(peca *p, tela *t){
     }
 }
 
-int movimentaPeca(peca * p, tela * t){
-    int i, j;
-    int movimentou = 0;
+// funcoes acima ja foram revisadas
+
+void movimentaPeca(peca * p, tela * t){
+    
+    int i, j, movimento = 0;
     
     for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
         for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
@@ -138,18 +139,17 @@ int movimentaPeca(peca * p, tela * t){
         }
     }
     
-    if(p->movimentos[p->iMovimento] == 'd'){
-        if(p->coluna + 1 < t->coluna + 1){ //if para a peça não sair pra fora pela direita
-        
+    if(p->movimentos[p->movimentosIndice] == 'd'){
+        if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
+            p->coluna += 1;
         }
-        p->coluna += 1;
-        movimentou = 1;
+        movimento = 1;
     }
-    else if(p->movimentos[p->iMovimento] == 'e'){ //if para a peça não sair pra fora pela esquerda
-        if(p->coluna - 1 > -1){
+    else if(p->movimentos[p->movimentosIndice] == 'e'){ 
+        if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
             p->coluna -= 1;
         }
-        movimentou = 1;
+        movimento = 1;
     }
     
     for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
@@ -158,9 +158,11 @@ int movimentaPeca(peca * p, tela * t){
         }
     }
     
-    p->iMovimento += 1;
+    p->movimentosIndice += 1;
     
-    return movimentou;
+    if(movimento){
+        imprimirTela(t);
+    }
 }
 
 void descePeca(peca * p, tela * t){
@@ -190,11 +192,12 @@ int main(int argc, char** argv) {
     peca p;
     
     t.sleep = 1;
-    p.iMovimento = 0;
+    p.movimentosIndice = 0;
     p.qtMovimentos = 3;
     
-    p.linha = 0;
-    
+    //posição atual da peça na tela
+    p.linha = 0; //sempre começa com zero
+    p.coluna = 0; //pegar no arquivo txt
     
     //acoes sobre a tela
     leDimensoes(&t);
@@ -222,20 +225,12 @@ int main(int argc, char** argv) {
     inserirPeca(&p, &t);
     imprimirTela(&t);
     
-    while(p.linha + 2 < t.linha){
-        if(movimentaPeca(&p, &t)){
-            imprimirTela(&t);
-            descePeca(&p, &t);
-            imprimirTela(&t);
-        }
-        else {
-            descePeca(&p, &t);
-            imprimirTela(&t);
-        }
-        
+    while(p.linha + 2 < t.linha){ //condição de parada para a peça não sair pra fora por baixo
+        movimentaPeca(&p, &t);
+        descePeca(&p, &t);
+        imprimirTela(&t);
     }
     
-    
-
+   
     return (EXIT_SUCCESS);
 }
