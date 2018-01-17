@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   main.c
  * Author: Hugo Carreira Costa e Wendell Ávila
@@ -16,8 +10,6 @@
 #include <unistd.h>
 
 typedef struct tela_ {
-    int linhainicial;
-    int colunainicial;
     int linha;
     int coluna;
     int sleep;
@@ -28,16 +20,17 @@ typedef struct peca_ {
     int linha;
     int coluna;
     int iMovimento;
-    int qtMovimento;
+    int qtMovimentos;
     char ** peca;
     char * movimentos;
 }peca;
 
-void espera(int segundos){
+void sleepTela(int segundos){
     sleep(segundos);
 }
 
-void imprimeTela(tela * t, int debug){
+void imprimirTela(tela * t){
+
     int i, j;
     
     for(i = 0; i < t->linha; i++){
@@ -46,46 +39,43 @@ void imprimeTela(tela * t, int debug){
         }
         printf("\n");
     }
-    if(!debug){
-        espera(t->sleep);
-    }
-    else {
-        espera(debug);
-    }
+    
+    sleepTela(t->sleep);
+
     system("clear");
 }
 
 void leDimensoes(tela * t){
-    //printf("Informe o tamanho da tela (x, y): ");
-    //scanf("%d %d", &t->x, &t->y);
+
     t->linha = 10;
     t->coluna = 20;
-    
-    t->linhainicial = t->linha;
-    t->colunainicial = t->coluna;
+
 }
 
 void alocaTela(tela * t){
+    
     int i;
     
-    t-> tela = malloc(t->linha * sizeof(char*));
-    
+    t->tela = malloc( t->linha * sizeof(char*) );
     for(i = 0; i < t->linha; i++){
-        t->tela[i] = malloc(t->coluna * sizeof(char));
+        t->tela[i] = malloc( t->coluna * sizeof(char) );
     }
     
 }
 
 void desalocaTela(tela * t){
+    
     int i;
     
     for(i = 0; i < t->linha; i++){
         free(t->tela[i]);
     }
     free(t->tela);
+
 }
 
-void iniciaTela(tela * t){
+void preencheTela(tela * t){
+
     int i, j;
     
     for(i = 0; i < t->linha; i++){
@@ -93,47 +83,44 @@ void iniciaTela(tela * t){
             t->tela[i][j] = '.';
         }
     }
+
 }
 
-void alocaPeca(peca * p, int movimentos){
+void alocaPeca(peca * p){
+
     int i, j;
-    p->qtMovimento = movimentos;
     
-    p->movimentos = malloc(p->qtMovimento * sizeof (char));
+    //alocando vetor com os movimentos
+    p->movimentos = malloc( p->qtMovimentos * sizeof (char) );
     
-    for(i = 0; i < p->qtMovimento; i++){
-        p->movimentos[i] = ' ';
-    }
-    
-    p->peca = malloc(3 * sizeof (char*));
-    
+    //alocando peça
+    p->peca = malloc( 3 * sizeof (char*) );
     for(i = 0; i < 3; i++){
         p->peca[i] = malloc(3 * sizeof(char));
-    }
-    
-    for(i = 0; i < 3; i++){
-        for(j = 0; j < 3; j++){
-            p->peca[i][j];
-        }
     }
     
 }
 
 void desalocaPeca(peca * p){
+
     int i;
     
+    //desalocando vetor dos movimentos
     free(p->movimentos);
     
+    //desalocando peça
     for(i = 0; i < 3; i++){
         free(p->peca[i]);
     }
-    
     free(p->peca);
+    
 }
 
-void inserePeca(peca *p, tela *t){
+// funcoes acima ja foram revisadas
+
+void inserirPeca(peca *p, tela *t){
     int i, j;
-    //desenhando a peca inicialmente
+    //inserindo peça na tela
     for(i = 0; i < 3; i++){
         for(j = 0; j < 3; j++){
             t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
@@ -152,7 +139,7 @@ int movimentaPeca(peca * p, tela * t){
     }
     
     if(p->movimentos[p->iMovimento] == 'd'){
-        if(p->coluna + 1 < t->colunainicial + 1){ //if para a peça não sair pra fora pela direita
+        if(p->coluna + 1 < t->coluna + 1){ //if para a peça não sair pra fora pela direita
         
         }
         p->coluna += 1;
@@ -185,7 +172,7 @@ void descePeca(peca * p, tela * t){
         }
     }
     
-    if(p->linha + 1 < t->linhainicial + 1){
+    if(p->linha + 1 < t->linha + 1){
         p->linha += 1;
     }
     
@@ -200,26 +187,28 @@ int main(int argc, char** argv) {
     
     int i;
     tela t;
-    t.sleep = 1;
-    
     peca p;
     
-    p.linha = 0;
+    t.sleep = 1;
     p.iMovimento = 0;
+    p.qtMovimentos = 3;
+    
+    p.linha = 0;
+    
     
     //acoes sobre a tela
     leDimensoes(&t);
-    
     alocaTela(&t);
-    iniciaTela(&t);
-    
-    imprimeTela(&t, 0);
+    preencheTela(&t);
+    imprimirTela(&t);
     
     //acoes sobre a peça
-    alocaPeca(&p, 10);
+    alocaPeca(&p);
     p.movimentos[0] = 'd';
     p.movimentos[1] = 'e';
     p.movimentos[2] = 'd';
+    
+    //desenhar peca
     p.peca[0][0] = '#';
     p.peca[0][1] = '#';
     p.peca[0][2] = '#';
@@ -230,18 +219,18 @@ int main(int argc, char** argv) {
     p.peca[2][1] = '.';
     p.peca[2][2] = '.';
     
-    inserePeca(&p, &t);
-    imprimeTela(&t, 0);
+    inserirPeca(&p, &t);
+    imprimirTela(&t);
     
     while(p.linha + 2 < t.linha){
         if(movimentaPeca(&p, &t)){
-            imprimeTela(&t, 0);
+            imprimirTela(&t);
             descePeca(&p, &t);
-            imprimeTela(&t, 0);
+            imprimirTela(&t);
         }
         else {
             descePeca(&p, &t);
-            imprimeTela(&t, 0);
+            imprimirTela(&t);
         }
         
     }
@@ -250,4 +239,3 @@ int main(int argc, char** argv) {
 
     return (EXIT_SUCCESS);
 }
-
