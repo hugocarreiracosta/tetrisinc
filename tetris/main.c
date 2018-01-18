@@ -45,16 +45,13 @@ void imprimirTela(tela * t, int sleepSeg){
         sleepTela(t->sleep);
     }
     else {
-        sleepTela(t->sleep / 2);
+        sleepTela(0);
     }
-    
 }
 
 void lerDimensoesTela(tela * t){
-
     t->linha = 10;
     t->coluna = 20;
-
 }
 
 void alocarTela(tela * t){
@@ -133,45 +130,6 @@ void inserirPeca(peca *p, tela *t){
     }
 }
 
-void moverPeca(peca * p, tela * t){
-    
-    int i, j, movimento = 0;
-    
-    //limpar tela
-    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
-        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
-            t->tela[p->linha + i][p->coluna + j] = '.';
-        }
-    }
-    
-    //movimentar
-    if(p->movimentos[p->movimentosIndice] == 'd'){
-        if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
-            p->coluna += 1;
-        }
-        movimento = 1;
-    }
-    else if(p->movimentos[p->movimentosIndice] == 'e'){ 
-        if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
-            p->coluna -= 1;
-        }
-        movimento = 1;
-    }
-    
-    //reinserir peça na tela na nova posição
-    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
-        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
-            t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
-        }
-    }
-    
-    p->movimentosIndice += 1;
-    
-    if(movimento){
-        imprimirTela(t, 0);
-    }
-}
-
 void descerPeca(peca * p, tela * t){
     
     int i, j;
@@ -193,6 +151,55 @@ void descerPeca(peca * p, tela * t){
         for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
             t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
         }
+    }
+}
+
+void moverPeca(peca * p, tela * t){
+    
+    int i, j, moveu = 0, desceu = 0;
+    
+    //limpar tela
+    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
+        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
+            t->tela[p->linha + i][p->coluna + j] = '.';
+        }
+    }
+    
+    //movimentar
+    if(p->movimentos[p->movimentosIndice] == 'd'){
+        if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
+            p->coluna += 1;
+        }
+        moveu = 1;
+    }
+    else if(p->movimentos[p->movimentosIndice] == 'e'){ 
+        if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
+            p->coluna -= 1;
+        }
+        moveu = 1;
+    }
+    else if(p->movimentos[p->movimentosIndice] == 'b'){
+        if(p->linha + 2 < t->linha){ //if para a peça não sair pra fora por baixo
+            descerPeca(p, t);
+        }
+        moveu = 1;
+        desceu = 1;
+    }
+    
+    //reinserir peça na tela na nova posição
+    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
+        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
+            t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
+        }
+    }
+    
+    p->movimentosIndice += 1;
+    
+    if(moveu == 1 & desceu == 0){
+        imprimirTela(t, 1);
+    }
+    else if(moveu == 1 & desceu == 1){
+        imprimirTela(t, 0);
     }
 }
 
@@ -226,8 +233,8 @@ int main(int argc, char** argv) {
     //ações sobre a peça
     alocarPeca(&p);
     p.movimentos[0] = 'd';
-    p.movimentos[1] = 'd';
-    p.movimentos[2] = 'd';
+    p.movimentos[1] = 'e';
+    p.movimentos[2] = 'b';
     
     //desenhar peca
     p.peca[0][0] = '#';
