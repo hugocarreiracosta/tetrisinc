@@ -30,7 +30,7 @@ void sleepTela(int segundos){
     system("clear");
 }
 
-void imprimirTela(tela * t){
+void imprimirTela(tela * t, int sleepSeg){
 
     int i, j;
     
@@ -41,17 +41,23 @@ void imprimirTela(tela * t){
         printf("\n");
     }
     
-    sleepTela(t->sleep);
+    if(sleepSeg){
+        sleepTela(t->sleep);
+    }
+    else {
+        sleepTela(t->sleep / 2);
+    }
+    
 }
 
-void leDimensoes(tela * t){
+void lerDimensoesTela(tela * t){
 
     t->linha = 10;
     t->coluna = 20;
 
 }
 
-void alocaTela(tela * t){
+void alocarTela(tela * t){
     
     int i;
     
@@ -62,7 +68,7 @@ void alocaTela(tela * t){
     
 }
 
-void desalocaTela(tela * t){
+void desalocarTela(tela * t){
     
     int i;
     
@@ -73,7 +79,7 @@ void desalocaTela(tela * t){
 
 }
 
-void preencheTela(tela * t){
+void preencherTela(tela * t){
 
     int i, j;
     
@@ -85,7 +91,7 @@ void preencheTela(tela * t){
 
 }
 
-void alocaPeca(peca * p){
+void alocarPeca(peca * p){
 
     int i, j;
     
@@ -100,7 +106,7 @@ void alocaPeca(peca * p){
     
 }
 
-void desalocaPeca(peca * p){
+void desalocarPeca(peca * p){
 
     int i;
     
@@ -127,18 +133,18 @@ void inserirPeca(peca *p, tela *t){
     }
 }
 
-// funcoes acima ja foram revisadas
-
-void movimentaPeca(peca * p, tela * t){
+void moverPeca(peca * p, tela * t){
     
     int i, j, movimento = 0;
     
+    //limpar tela
     for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
         for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
             t->tela[p->linha + i][p->coluna + j] = '.';
         }
     }
     
+    //movimentar
     if(p->movimentos[p->movimentosIndice] == 'd'){
         if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
             p->coluna += 1;
@@ -152,6 +158,7 @@ void movimentaPeca(peca * p, tela * t){
         movimento = 1;
     }
     
+    //reinserir peça na tela na nova posição
     for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
         for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
             t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
@@ -161,23 +168,27 @@ void movimentaPeca(peca * p, tela * t){
     p->movimentosIndice += 1;
     
     if(movimento){
-        imprimirTela(t);
+        imprimirTela(t, 0);
     }
 }
 
-void descePeca(peca * p, tela * t){
+void descerPeca(peca * p, tela * t){
+    
     int i, j;
     
+    //limpar tela
     for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
         for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
             t->tela[p->linha + i][p->coluna + j] = '.';
         }
     }
     
+    //descer
     if(p->linha + 1 < t->linha + 1){
         p->linha += 1;
     }
     
+    //reinserir peça na tela na nova posição
     for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
         for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
             t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
@@ -191,24 +202,31 @@ int main(int argc, char** argv) {
     tela t;
     peca p;
     
-    t.sleep = 1;
-    p.movimentosIndice = 0;
-    p.qtMovimentos = 3;
+    t.sleep = 1; //pegar no arquivo txt
+    p.movimentosIndice = 0; //sempre começa com zero
+    p.qtMovimentos = 3; //pegar no arquivo txt
     
     //posição atual da peça na tela
     p.linha = 0; //sempre começa com zero
     p.coluna = 0; //pegar no arquivo txt
     
     //acoes sobre a tela
-    leDimensoes(&t);
-    alocaTela(&t);
-    preencheTela(&t);
-    imprimirTela(&t);
+    lerDimensoesTela(&t);
+    alocarTela(&t);
+    preencherTela(&t);
+    imprimirTela(&t, 1);
     
-    //acoes sobre a peça
-    alocaPeca(&p);
+    if(p.coluna > t.coluna - 3){ //condição para a peça não começar fora da tela
+        p.coluna = t.coluna - 3; 
+    }
+    else if(p.coluna < 0){
+        p.coluna = 0;
+    }
+    
+    //ações sobre a peça
+    alocarPeca(&p);
     p.movimentos[0] = 'd';
-    p.movimentos[1] = 'e';
+    p.movimentos[1] = 'd';
     p.movimentos[2] = 'd';
     
     //desenhar peca
@@ -223,14 +241,13 @@ int main(int argc, char** argv) {
     p.peca[2][2] = '.';
     
     inserirPeca(&p, &t);
-    imprimirTela(&t);
+    imprimirTela(&t, 1);
     
     while(p.linha + 2 < t.linha){ //condição de parada para a peça não sair pra fora por baixo
-        movimentaPeca(&p, &t);
-        descePeca(&p, &t);
-        imprimirTela(&t);
+        moverPeca(&p, &t);
+        descerPeca(&p, &t);
+        imprimirTela(&t, 1);
     }
     
-   
     return (EXIT_SUCCESS);
 }
