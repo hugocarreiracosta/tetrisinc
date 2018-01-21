@@ -20,9 +20,9 @@ typedef struct peca_ {
     int linha;
     int coluna;
     int qtMovimentos;
-    char ** peca;
     char * movimentos;
     int movimentosIndice;
+    char ** peca;
 }peca;
 
 void sleepTela(int segundos){
@@ -203,11 +203,28 @@ void moverPeca(peca * p, tela * t){
     }
 }
 
+void gerarSaida(tela * t, FILE * saida){
+    int i, j;
+    
+    for(i = 0; i < t->linha; i++){
+        for(j = 0; j < t->coluna; j++){
+            fprintf(saida, "%c", t->tela[i][j]);
+            //fprintf(saida, "\n");
+        }
+        fprintf(saida, "\n");
+    }
+    fprintf(saida, "\n");
+}
+
 int main(int argc, char** argv) {
     
     int i;
     tela t;
     peca p;
+    
+    //abrindo arquivo de saida
+    FILE *saida;
+    saida = fopen("saida.txt", "a");
     
     t.sleep = 1; //pegar no arquivo txt
     p.movimentosIndice = 0; //sempre começa com zero
@@ -255,6 +272,9 @@ int main(int argc, char** argv) {
         descerPeca(&p, &t);
         imprimirTela(&t, 1);
     }
+    
+    gerarSaida(&t, saida);
+    fclose(saida);
     
     return (EXIT_SUCCESS);
 }
