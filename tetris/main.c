@@ -69,8 +69,7 @@ void lerAquivo(tela * t, FILE * entrada, peca * p){
 
     fscanf(entrada, " %c %c %c\n", &p->peca[0][0], &p->peca[0][1], &p->peca[0][2]);
     fscanf(entrada, "%c %c %c\n", &p->peca[1][0], &p->peca[1][1], &p->peca[1][2]);
-    fscanf(entrada, "%c %c %c\n", &p->peca[2][0], &p->peca[2][1], &p->peca[2][2]);
-    
+    fscanf(entrada, "%c %c %c", &p->peca[2][0], &p->peca[2][1], &p->peca[2][2]);
     fscanf(entrada, "%d", &p->qtMovimentos);
     
 }
@@ -112,15 +111,18 @@ void preencherTela(tela * t){
 void alocarPeca(peca * p){
 
     int i, j;
-    
-    //alocando vetor com os movimentos
-    p->movimentos = malloc( p->qtMovimentos * sizeof (char) );
-    
     //alocando peça
     p->peca = malloc( 3 * sizeof (char*) );
     for(i = 0; i < 3; i++){
         p->peca[i] = malloc(3 * sizeof(char));
     }
+    
+}
+
+void alocarMovimentos(peca * p){
+    
+    //alocando vetor com os movimentos
+    p->movimentos = malloc( p->qtMovimentos * sizeof (char) );
     
 }
 
@@ -254,7 +256,7 @@ int main(int argc, char** argv) {
     entrada = fopen("entrada.txt", "r");
     
     p.movimentosIndice = 0; //sempre começa com zero
-    p.qtMovimentos = 4; //pegar no arquivo txt
+    //p.qtMovimentos = 2; //pegar no arquivo txt
     
     //posição atual da peça na tela
     p.linha = 0; //sempre começa com zero
@@ -263,6 +265,7 @@ int main(int argc, char** argv) {
     //acoes sobre a tela
     alocarPeca(&p);
     lerAquivo(&t, entrada, &p);
+    alocarMovimentos(&p);
     alocarTela(&t);
     preencherTela(&t);
     imprimirTela(&t, 1);
