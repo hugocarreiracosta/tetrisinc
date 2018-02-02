@@ -23,6 +23,7 @@ typedef struct peca_ {
     char * movimentos;
     int movimentosIndice;
     char ** peca;
+    int qtdPeca;
 }peca;
 
 void sleepTela(int segundos){
@@ -50,15 +51,12 @@ void imprimirTela(tela * t, int sleepSeg){
 }
 
 void lerAquivo(tela * t, FILE * entrada, peca * p){
-//    t->linha = 10;
-//    t->coluna = 20;
-//lendo tamanho da tela
     
-    int qtdPeca;
+    char quebraLinha[2];
     fscanf(entrada, "%d", &t->linha);
     fscanf(entrada, "%d", &t->coluna);
     fscanf(entrada, "%d", &t->sleep);
-    fscanf(entrada, "%d", &qtdPeca);
+    fscanf(entrada, "%d", &p->qtdPeca);
     fscanf(entrada, "%d", &p->coluna);
     
      //condição para a peça não começar fora da tela
@@ -68,31 +66,11 @@ void lerAquivo(tela * t, FILE * entrada, peca * p){
     else if(p->coluna < 0){
         p->coluna = 0;
     }
-    
-    
-      fscanf(entrada, "%c", &p->peca[0][0]);
-      fscanf(entrada, "%c", &p->peca[0][1]);
-      fscanf(entrada, "%c", &p->peca[0][2]);
-      fscanf(entrada, "%c", &p->peca[1][0]);
-      fscanf(entrada, "%c", &p->peca[1][1]);
-      fscanf(entrada, "%c", &p->peca[1][2]);
-      fscanf(entrada, "%c", &p->peca[2][0]);
-      fscanf(entrada, "%c", &p->peca[2][1]);
-      fscanf(entrada, "%c", &p->peca[2][2]);
 
+    fscanf(entrada, " %c %c %c\n", &p->peca[0][0], &p->peca[0][1], &p->peca[0][2]);
+    fscanf(entrada, "%c %c %c\n", &p->peca[1][0], &p->peca[1][1], &p->peca[1][2]);
+    fscanf(entrada, "%c %c %c\n", &p->peca[2][0], &p->peca[2][1], &p->peca[2][2]);
     
-    
-    //ler peca
-//    int i, j;
-//    for (i = 0; i < 3; i++) {
-//        for (j = 0; j < 3; j++) {
-//            fscanf(entrada, "%c", &p->peca[i][j]);
-//            printf("%c", p->peca[i][j]);
-//        }
-//    }
-    
-    
-//    printf("%c", p->peca[i][j]);;
 }
 
 void alocarTela(tela * t){
@@ -244,7 +222,7 @@ void moverPeca(peca * p, tela * t){
     }
 }
 
-void gerarSaida(tela * t, FILE * saida){
+void gerarSaida(tela * t, FILE * saida, peca * p){
     int i, j;
     
     for(i = 0; i < t->linha; i++){
@@ -262,6 +240,7 @@ int main(int argc, char** argv) {
     int i;
     tela t;
     peca p;
+    char quebraLinha[2];
     
     //abrindo arquivo de saida
     FILE *saida;
@@ -280,6 +259,7 @@ int main(int argc, char** argv) {
     //p.coluna = 0; //pegar no arquivo txt
     
     //acoes sobre a tela
+    alocarPeca(&p);
     lerAquivo(&t, entrada, &p);
     alocarTela(&t);
     preencherTela(&t);
@@ -288,32 +268,42 @@ int main(int argc, char** argv) {
     //printf("Linha: %d   | Coluna: %d", t.linha, t.coluna);
     
     //ações sobre a peça
-    alocarPeca(&p);
+    
     p.movimentos[0] = 'd';
     p.movimentos[1] = 'e';
     p.movimentos[2] = 'b';
     
     //desenhar peca
-//    p.peca[0][0] = '#';
-//    p.peca[0][1] = '#';
-//    p.peca[0][2] = '#';
-//    p.peca[1][0] = '.';
-//    p.peca[1][1] = '.';
-//    p.peca[1][2] = '#';
-//    p.peca[2][0] = '.';
-//    p.peca[2][1] = '.';
-//    p.peca[2][2] = '.';
+
     
     inserirPeca(&p, &t);
     imprimirTela(&t, 1);
     
-    while(p.linha + 2 < t.linha){ //condição de parada para a peça não sair pra fora por baixo
-        moverPeca(&p, &t);
-        descerPeca(&p, &t);
-        imprimirTela(&t, 1);
+    int descecont = 1;
+    
+    if((p.peca[2][0] == ".") && (p.peca[2][1] == ".") && (p.peca[2][2] == ".")){
+        if((p.peca[1][0] == ".") && (p.peca[1][1] == ".") && (p.peca[1][2] == ".")){
+            descecont++;
+            if((p.peca[0][0] == ".") && (p.peca[0][1] == ".") && (p.peca[0][2] == ".")){
+                descecont++;
+            }
+        }
+        
+        while(p.linha + descecont < t.linha){ //condição de parada para a peça não sair pra fora por baixo
+            moverPeca(&p, &t);
+            descerPeca(&p, &t);
+            imprimirTela(&t, 1);
+        }
+    }
+    else {
+        while(p.linha < t.linha){ //condição de parada para a peça não sair pra fora por baixo
+            moverPeca(&p, &t);
+            descerPeca(&p, &t);
+            imprimirTela(&t, 1);
+        }
     }
     
-    gerarSaida(&t, saida);
+    gerarSaida(&t, saida, &p);
     fclose(saida);
     fclose(entrada);
     
