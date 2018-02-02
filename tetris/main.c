@@ -49,9 +49,50 @@ void imprimirTela(tela * t, int sleepSeg){
     }
 }
 
-void lerDimensoesTela(tela * t){
-    t->linha = 10;
-    t->coluna = 20;
+void lerAquivo(tela * t, FILE * entrada, peca * p){
+//    t->linha = 10;
+//    t->coluna = 20;
+//lendo tamanho da tela
+    
+    int qtdPeca;
+    fscanf(entrada, "%d", &t->linha);
+    fscanf(entrada, "%d", &t->coluna);
+    fscanf(entrada, "%d", &t->sleep);
+    fscanf(entrada, "%d", &qtdPeca);
+    fscanf(entrada, "%d", &p->coluna);
+    
+     //condição para a peça não começar fora da tela
+    if(p->coluna > t->coluna - 3){
+        p->coluna = t->coluna - 3; 
+    }
+    else if(p->coluna < 0){
+        p->coluna = 0;
+    }
+    
+    
+      fscanf(entrada, "%c", &p->peca[0][0]);
+      fscanf(entrada, "%c", &p->peca[0][1]);
+      fscanf(entrada, "%c", &p->peca[0][2]);
+      fscanf(entrada, "%c", &p->peca[1][0]);
+      fscanf(entrada, "%c", &p->peca[1][1]);
+      fscanf(entrada, "%c", &p->peca[1][2]);
+      fscanf(entrada, "%c", &p->peca[2][0]);
+      fscanf(entrada, "%c", &p->peca[2][1]);
+      fscanf(entrada, "%c", &p->peca[2][2]);
+
+    
+    
+    //ler peca
+//    int i, j;
+//    for (i = 0; i < 3; i++) {
+//        for (j = 0; j < 3; j++) {
+//            fscanf(entrada, "%c", &p->peca[i][j]);
+//            printf("%c", p->peca[i][j]);
+//        }
+//    }
+    
+    
+//    printf("%c", p->peca[i][j]);;
 }
 
 void alocarTela(tela * t){
@@ -226,26 +267,25 @@ int main(int argc, char** argv) {
     FILE *saida;
     saida = fopen("saida.txt", "a");
     
-    t.sleep = 1; //pegar no arquivo txt
+    //lendo entrada em arquivo
+    FILE *entrada; 
+    entrada = fopen("entrada.txt", "r");
+    
+    //t.sleep = 1; //pegar no arquivo txt
     p.movimentosIndice = 0; //sempre começa com zero
     p.qtMovimentos = 3; //pegar no arquivo txt
     
     //posição atual da peça na tela
     p.linha = 0; //sempre começa com zero
-    p.coluna = 0; //pegar no arquivo txt
+    //p.coluna = 0; //pegar no arquivo txt
     
     //acoes sobre a tela
-    lerDimensoesTela(&t);
+    lerAquivo(&t, entrada, &p);
     alocarTela(&t);
     preencherTela(&t);
     imprimirTela(&t, 1);
     
-    if(p.coluna > t.coluna - 3){ //condição para a peça não começar fora da tela
-        p.coluna = t.coluna - 3; 
-    }
-    else if(p.coluna < 0){
-        p.coluna = 0;
-    }
+    //printf("Linha: %d   | Coluna: %d", t.linha, t.coluna);
     
     //ações sobre a peça
     alocarPeca(&p);
@@ -254,15 +294,15 @@ int main(int argc, char** argv) {
     p.movimentos[2] = 'b';
     
     //desenhar peca
-    p.peca[0][0] = '#';
-    p.peca[0][1] = '#';
-    p.peca[0][2] = '#';
-    p.peca[1][0] = '.';
-    p.peca[1][1] = '.';
-    p.peca[1][2] = '#';
-    p.peca[2][0] = '.';
-    p.peca[2][1] = '.';
-    p.peca[2][2] = '.';
+//    p.peca[0][0] = '#';
+//    p.peca[0][1] = '#';
+//    p.peca[0][2] = '#';
+//    p.peca[1][0] = '.';
+//    p.peca[1][1] = '.';
+//    p.peca[1][2] = '#';
+//    p.peca[2][0] = '.';
+//    p.peca[2][1] = '.';
+//    p.peca[2][2] = '.';
     
     inserirPeca(&p, &t);
     imprimirTela(&t, 1);
@@ -275,6 +315,7 @@ int main(int argc, char** argv) {
     
     gerarSaida(&t, saida);
     fclose(saida);
+    fclose(entrada);
     
     return (EXIT_SUCCESS);
 }
