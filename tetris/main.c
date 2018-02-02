@@ -14,6 +14,7 @@ typedef struct tela_ {
     int coluna;
     int sleep;
     char ** tela;
+    int qtdPeca;
 }tela;
 
 typedef struct peca_ {
@@ -23,7 +24,6 @@ typedef struct peca_ {
     char * movimentos;
     int movimentosIndice;
     char ** peca;
-    int qtdPeca;
 }peca;
 
 void sleepTela(int segundos){
@@ -52,11 +52,10 @@ void imprimirTela(tela * t, int sleepSeg){
 
 void lerAquivo(tela * t, FILE * entrada, peca * p){
     
-    char quebraLinha[2];
     fscanf(entrada, "%d", &t->linha);
     fscanf(entrada, "%d", &t->coluna);
     fscanf(entrada, "%d", &t->sleep);
-    fscanf(entrada, "%d", &p->qtdPeca);
+    fscanf(entrada, "%d", &t->qtdPeca);
     fscanf(entrada, "%d", &p->coluna);
     
      //condição para a peça não começar fora da tela
