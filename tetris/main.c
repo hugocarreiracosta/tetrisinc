@@ -26,6 +26,13 @@ typedef struct peca_ {
     char ** peca;
 }peca;
 
+void alocarMovimentos(peca * p){
+    
+    //alocando vetor com os movimentos
+    p->movimentos = malloc( p->qtMovimentos * sizeof (char) );
+    
+}
+
 void sleepTela(int segundos){
     sleep(segundos);
     system("clear");
@@ -52,24 +59,37 @@ void imprimirTela(tela * t, int sleepSeg){
 
 void lerAquivo(tela * t, FILE * entrada, peca * p){
     
+    int i;
+    
     fscanf(entrada, "%d", &t->linha);
     fscanf(entrada, "%d", &t->coluna);
     fscanf(entrada, "%d", &t->sleep);
     fscanf(entrada, "%d", &t->qtdPeca);
-    fscanf(entrada, "%d", &p->coluna);
     
-     //condição para a peça não começar fora da tela
-    if(p->coluna > t->coluna - 3){
-        p->coluna = t->coluna - 3; 
-    }
-    else if(p->coluna < 0){
-        p->coluna = 0;
-    }
+    for(i = 0; i < t->qtdPeca; i++){
+         fscanf(entrada, "%d", &p->coluna);
+    
+        //condição para a peça não começar fora da tela
+        if(p->coluna > t->coluna - 3){
+            p->coluna = t->coluna - 3; 
+        }
+        else if(p->coluna < 0){
+            p->coluna = 0;
+        }
 
-    fscanf(entrada, " %c %c %c\n", &p->peca[0][0], &p->peca[0][1], &p->peca[0][2]);
-    fscanf(entrada, "%c %c %c\n", &p->peca[1][0], &p->peca[1][1], &p->peca[1][2]);
-    fscanf(entrada, "%c %c %c", &p->peca[2][0], &p->peca[2][1], &p->peca[2][2]);
-    fscanf(entrada, "%d", &p->qtMovimentos);
+        fscanf(entrada, " %c %c %c\n", &p->peca[0][0], &p->peca[0][1], &p->peca[0][2]);
+        fscanf(entrada, "%c %c %c\n", &p->peca[1][0], &p->peca[1][1], &p->peca[1][2]);
+        fscanf(entrada, "%c %c %c", &p->peca[2][0], &p->peca[2][1], &p->peca[2][2]);
+        fscanf(entrada, "%d", &p->qtMovimentos);
+
+        alocarMovimentos(p);
+
+        for(i = 0; i < p->qtMovimentos; i++){
+            fscanf(entrada, " %c", &p->movimentos[i]); 
+        }  
+    }
+    
+    
     
 }
 
@@ -115,13 +135,6 @@ void alocarPeca(peca * p){
     for(i = 0; i < 3; i++){
         p->peca[i] = malloc(3 * sizeof(char));
     }
-    
-}
-
-void alocarMovimentos(peca * p){
-    
-    //alocando vetor com os movimentos
-    p->movimentos = malloc( p->qtMovimentos * sizeof (char) );
     
 }
 
@@ -264,17 +277,16 @@ int main(int argc, char** argv) {
     //acoes sobre a tela
     alocarPeca(&p);
     lerAquivo(&t, entrada, &p);
-    alocarMovimentos(&p);
     alocarTela(&t);
     preencherTela(&t);
     imprimirTela(&t, 1);
     
     
     //ações sobre a peça
-    p.movimentos[0] = 'd';
-    p.movimentos[1] = 'e';
-    p.movimentos[2] = 'b';
-    p.movimentos[3] = 'e';
+    //p.movimentos[0] = 'd';
+    //p.movimentos[1] = 'e';
+    //p.movimentos[2] = 'b';
+    //p.movimentos[3] = 'e';
     
     //desenhar peca
     inserirPeca(&p, &t);
