@@ -71,6 +71,8 @@ void lerAquivo(tela * t, FILE * entrada, peca * p){
     fscanf(entrada, "%c %c %c\n", &p->peca[1][0], &p->peca[1][1], &p->peca[1][2]);
     fscanf(entrada, "%c %c %c\n", &p->peca[2][0], &p->peca[2][1], &p->peca[2][2]);
     
+    fscanf(entrada, "%d", &p->qtMovimentos);
+    
 }
 
 void alocarTela(tela * t){
@@ -185,19 +187,19 @@ void moverPeca(peca * p, tela * t){
     }
     
     //movimentar
-    if(p->movimentos[p->movimentosIndice] == 'd'){
+    if(p->movimentos[p->movimentosIndice] == 'd'){ //movimento p/ DIRETA
         if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
             p->coluna += 1;
         }
         moveu = 1;
     }
-    else if(p->movimentos[p->movimentosIndice] == 'e'){ 
+    else if(p->movimentos[p->movimentosIndice] == 'e'){ //movimento p/ ESQUERDA
         if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
             p->coluna -= 1;
         }
         moveu = 1;
     }
-    else if(p->movimentos[p->movimentosIndice] == 'b'){
+    else if(p->movimentos[p->movimentosIndice] == 'b'){ //movimento p/ BAIXO
         if(p->linha + 2 < t->linha){ //if para a peça não sair pra fora por baixo
             descerPeca(p, t);
         }
@@ -233,6 +235,7 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
         fprintf(saida, "\n");
     }
     fprintf(saida, "\n");
+
 }
 
 int main(int argc, char** argv) {
@@ -250,9 +253,8 @@ int main(int argc, char** argv) {
     FILE *entrada; 
     entrada = fopen("entrada.txt", "r");
     
-    //t.sleep = 1; //pegar no arquivo txt
     p.movimentosIndice = 0; //sempre começa com zero
-    p.qtMovimentos = 3; //pegar no arquivo txt
+    p.qtMovimentos = 4; //pegar no arquivo txt
     
     //posição atual da peça na tela
     p.linha = 0; //sempre começa com zero
@@ -265,27 +267,25 @@ int main(int argc, char** argv) {
     preencherTela(&t);
     imprimirTela(&t, 1);
     
-    //printf("Linha: %d   | Coluna: %d", t.linha, t.coluna);
     
     //ações sobre a peça
-    
     p.movimentos[0] = 'd';
     p.movimentos[1] = 'e';
     p.movimentos[2] = 'b';
+    p.movimentos[3] = 'e';
     
     //desenhar peca
-
-    
     inserirPeca(&p, &t);
     imprimirTela(&t, 1);
     
-    int descecont = 1;
+    int descecont = 3;
     
-    if((p.peca[2][0] == ".") && (p.peca[2][1] == ".") && (p.peca[2][2] == ".")){
-        if((p.peca[1][0] == ".") && (p.peca[1][1] == ".") && (p.peca[1][2] == ".")){
-            descecont++;
-            if((p.peca[0][0] == ".") && (p.peca[0][1] == ".") && (p.peca[0][2] == ".")){
-                descecont++;
+    if((p.peca[2][0] == '.') && (p.peca[2][1] == '.') && (p.peca[2][2] == '.')){
+        descecont--;
+        if((p.peca[1][0] == '.') && (p.peca[1][1] == '.') && (p.peca[1][2] == '.')){
+            descecont --;
+            if((p.peca[0][0] == '.') && (p.peca[0][1] == '.') && (p.peca[0][2] == '.')){
+                descecont --;
             }
         }
         
@@ -296,7 +296,7 @@ int main(int argc, char** argv) {
         }
     }
     else {
-        while(p.linha < t.linha){ //condição de parada para a peça não sair pra fora por baixo
+        while(p.linha + descecont < t.linha){ //condição de parada para a peça não sair pra fora por baixo
             moverPeca(&p, &t);
             descerPeca(&p, &t);
             imprimirTela(&t, 1);
