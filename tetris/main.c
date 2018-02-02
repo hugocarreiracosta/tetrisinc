@@ -138,12 +138,18 @@ void alocarPeca(peca * p){
     
 }
 
-void desalocarPeca(peca * p){
+void desalocarMovimentos(peca * p){
 
     int i;
     
     //desalocando vetor dos movimentos
     free(p->movimentos);
+    
+}
+
+void desalocarPeca(peca * p){
+
+    int i;
     
     //desalocando peça
     for(i = 0; i < 3; i++){
@@ -257,7 +263,6 @@ int main(int argc, char** argv) {
     int i;
     tela t;
     peca p;
-    char quebraLinha[2];
     
     //abrindo arquivo de saida
     FILE *saida;
@@ -280,13 +285,6 @@ int main(int argc, char** argv) {
     alocarTela(&t);
     preencherTela(&t);
     imprimirTela(&t, 1);
-    
-    
-    //ações sobre a peça
-    //p.movimentos[0] = 'd';
-    //p.movimentos[1] = 'e';
-    //p.movimentos[2] = 'b';
-    //p.movimentos[3] = 'e';
     
     //desenhar peca
     inserirPeca(&p, &t);
@@ -320,6 +318,9 @@ int main(int argc, char** argv) {
     gerarSaida(&t, saida, &p);
     fclose(saida);
     fclose(entrada);
+    desalocarTela(&t);
+    desalocarPeca(&p);
+    desalocarMovimentos(&p);
     
     return (EXIT_SUCCESS);
 }
