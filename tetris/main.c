@@ -332,6 +332,7 @@ int main(int argc, char** argv) {
     int i;
     tela t;
     peca p;
+    char condicao;
     
     //abrindo arquivo de entrada
     FILE *entrada; 
@@ -343,7 +344,7 @@ int main(int argc, char** argv) {
     
     alocarPeca(&p);
     
-    for(i = 0; i < 2; i++){
+    while(condicao != EOF){
         lerTela(&t, entrada);
         alocarTela(&t);
         preencherTela(&t);
@@ -361,6 +362,8 @@ int main(int argc, char** argv) {
         gerarSaida(&t, saida, &p);
         desalocarMovimentos(&p);
         desalocarTela(&t);
+        
+        condicao = fgetc(entrada);
     }
     
     desalocarPeca(&p);
