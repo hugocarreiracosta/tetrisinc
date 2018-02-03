@@ -178,6 +178,54 @@ void descerPeca(peca * p, tela * t, int tipoDescida){
     int i, j;
     
     if(tipoDescida == 3){
+        
+//        if(t->tela[p->linha + 3][p->coluna] == '.'){
+//            t->tela[p->linha + 3][p->coluna] = t->tela[p->linha + 2][p->coluna];
+//            t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
+//            t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
+//            t->tela[p->linha][p->coluna] = '.';
+//        }
+//        else if(t->tela[p->linha + 2][p->coluna] == '.'){
+//            t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
+//            t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
+//            t->tela[p->linha][p->coluna] = '.';
+//        }
+//        else if(t->tela[p->linha + 1][p->coluna] == '.'){
+//            t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
+//            t->tela[p->linha][p->coluna] = '.';
+//        }
+//        
+//        if(t->tela[p->linha + 3][p->coluna + 1] == '.'){
+//            t->tela[p->linha + 3][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 1];
+//            t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
+//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+//            t->tela[p->linha][p->coluna + 1] = '.';
+//        }
+//        else if(t->tela[p->linha + 2][p->coluna + 1] == '.'){
+//            t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
+//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+//            t->tela[p->linha][p->coluna + 1] = '.';
+//        }
+//        else if(t->tela[p->linha + 1][p->coluna + 1] == '.'){
+//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+//            t->tela[p->linha][p->coluna + 1] = '.';
+//        }
+//        
+//        if(t->tela[p->linha + 3][p->coluna + 2] == '.'){
+//            t->tela[p->linha + 3][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 2];
+//            t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
+//            t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
+//            t->tela[p->linha][p->coluna + 2] = '.';
+//        }
+//        else if(t->tela[p->linha + 2][p->coluna + 2] == '.'){
+//            t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
+//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+//            t->tela[p->linha][p->coluna + 1] = '.';
+//        }
+//        else if(t->tela[p->linha + 1][p->coluna + 2] == '.'){
+//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+//            t->tela[p->linha][p->coluna + 1] = '.';
+//        }
         t->tela[p->linha + 3][p->coluna] = t->tela[p->linha + 2][p->coluna];
         t->tela[p->linha + 3][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 1];
         t->tela[p->linha + 3][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 2];
