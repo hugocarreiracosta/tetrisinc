@@ -305,9 +305,54 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
 
 }
 
+int limitesPeca(peca * p, int limite[3]){
+    
+    //col1
+    if(p->peca[2][0] != '.'){
+        limite[0] = 2;
+    }
+    else if(p->peca[1][0] != '.'){
+        limite[0] = 1;
+    }
+    else if(p->peca[0][0] != '.'){
+        limite[0] = 0;
+    }
+    else {
+        limite[0] = -1;
+    }
+    
+    //col2
+    if(p->peca[2][1] != '.'){
+        limite[1] = 2;
+    }
+    else if(p->peca[1][1] != '.'){
+        limite[1] = 1;
+    }
+    else if(p->peca[0][1] != '.'){
+        limite[1] = 0;
+    }
+    else {
+        limite[0] = -1;
+    }
+    
+    //col3
+    if(p->peca[2][2] != '.'){
+        limite[2] = 2;
+    }
+    else if(p->peca[1][2] != '.'){
+        limite[2] = 1;
+    }
+    else if(p->peca[0][2] != '.'){
+        limite[2] = 0;
+    }
+    else {
+        limite[0] = -1;
+    }
+}
+
 void rodarMovimentos(peca *p, tela *t){
     
-    int lin = 0, descecont = 3;
+    int limites[3], descecont = 3;
     
     if((p->peca[2][0] == '.') && (p->peca[2][1] == '.') && (p->peca[2][2] == '.')){
         descecont--; //2x3
@@ -319,10 +364,22 @@ void rodarMovimentos(peca *p, tela *t){
         }
     }
     
-    while(p->linha + descecont < t->linha){ //condição de parada para a peça não sair pra fora por baixo
-        moverPeca(p, t, descecont);
-        descerPeca(p, t, descecont);
-        imprimirTela(t, 1);
+    limitesPeca(p, limites);
+    
+    int linhaLimite = t->linha;
+
+    
+    while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora por baixo
+        
+        if(((t->tela[p->linha + limites[0] + 1][p->coluna] == '.') && (t->tela[p->linha + limites[1] + 1][p->coluna + 1] == '.') && (t->tela[p->linha + limites[2] + 1][p->coluna + 2] == '.'))){
+            moverPeca(p, t, descecont);
+            descerPeca(p, t, descecont);
+            imprimirTela(t, 1);
+        }
+        else {
+            linhaLimite = 0;
+        }
+           
     }
        
 }
