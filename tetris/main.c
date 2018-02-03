@@ -173,56 +173,63 @@ void inserirPeca(peca *p, tela *t){
     }
 }
 
-void descerPeca(peca * p, tela * t){
+void descerPeca(peca * p, tela * t, int tipoDescida){
     
     int i, j;
     
-//    //limpar tela
-//    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
-//        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
-//            t->tela[p->linha + i][p->coluna + j] = '.';
-//        }
-//    }
-//    
-//    //descer
-//    if(p->linha + 1 < t->linha + 1){
-//        p->linha += 1;
-//    }
-//    
-//    //reinserir peça na tela na nova posição
-//    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
-//        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
-//            t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
-//        }
-//    }
-    
-      t->tela[p->linha + 3][p->coluna] = t->tela[p->linha + 2][p->coluna];
-      t->tela[p->linha + 3][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 1];
-      t->tela[p->linha + 3][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 2];
-      t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
-      t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
-      t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
-      t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-      t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-      t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
-      t->tela[p->linha][p->coluna] = '.';
-      t->tela[p->linha][p->coluna + 1] = '.';
-      t->tela[p->linha][p->coluna + 2] = '.';
-      
-      p->linha += 1;
-    
+    if(tipoDescida == 3){
+        t->tela[p->linha + 3][p->coluna] = t->tela[p->linha + 2][p->coluna];
+        t->tela[p->linha + 3][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 1];
+        t->tela[p->linha + 3][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 2];
+        
+        t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
+        t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
+        t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
+        
+        t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
+        t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+        t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
+        
+        t->tela[p->linha][p->coluna] = '.';
+        t->tela[p->linha][p->coluna + 1] = '.';
+        t->tela[p->linha][p->coluna + 2] = '.';
+    }
+    else if(tipoDescida == 2){
+        t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
+        t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
+        t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
+        
+        t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
+        t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+        t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
+        
+        t->tela[p->linha][p->coluna] = '.';
+        t->tela[p->linha][p->coluna + 1] = '.';
+        t->tela[p->linha][p->coluna + 2] = '.';
+    }
+    else if(tipoDescida == 1){
+        
+        t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
+        t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
+        t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
+        
+        t->tela[p->linha][p->coluna] = '.';
+        t->tela[p->linha][p->coluna + 1] = '.';
+        t->tela[p->linha][p->coluna + 2] = '.';
+    }
+    else if(tipoDescida == 0){
+        
+        t->tela[p->linha][p->coluna] = '.';
+        t->tela[p->linha][p->coluna + 1] = '.';
+        t->tela[p->linha][p->coluna + 2] = '.';
+    }
+
+    p->linha += 1;
 }
 
-void moverPeca(peca * p, tela * t){
+void moverPeca(peca * p, tela * t, int tipoDescida){
     
     int i, j, moveu = 0, desceu = 0;
-    
-//    //limpar tela
-//    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
-//        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
-//            t->tela[p->linha + i][p->coluna + j] = '.';
-//        }
-//    }
     
     //movimentar
     if(p->movimentos[p->movimentosIndice] == 'd'){ //movimento p/ DIRETA
@@ -267,18 +274,12 @@ void moverPeca(peca * p, tela * t){
     }
     else if(p->movimentos[p->movimentosIndice] == 'b'){ //movimento p/ BAIXO
         if(p->linha + 2 < t->linha){ //if para a peça não sair pra fora por baixo
-            descerPeca(p, t);
+            descerPeca(p, t, tipoDescida);
         }
         moveu = 1;
         desceu = 1;
     }
-    
-//    //reinserir peça na tela na nova posição
-//    for(i = 0; (i < 3 && p->linha + i < t->linha); i++){
-//        for(j = 0; (j < 3 && p->coluna + j < t->coluna); j++){
-//            t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
-//        }
-//    }
+
     
     p->movimentosIndice += 1;
     
@@ -306,30 +307,24 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
 
 void rodarMovimentos(peca *p, tela *t){
     
-    int descecont = 3;
+    int lin = 0, descecont = 3;
     
     if((p->peca[2][0] == '.') && (p->peca[2][1] == '.') && (p->peca[2][2] == '.')){
-        descecont--;
+        descecont--; //2x3
         if((p->peca[1][0] == '.') && (p->peca[1][1] == '.') && (p->peca[1][2] == '.')){
-            descecont --;
+            descecont--; //1x3
             if((p->peca[0][0] == '.') && (p->peca[0][1] == '.') && (p->peca[0][2] == '.')){
-                descecont --;
+                descecont--; //0x0
             }
         }
-        
-        while(p->linha + descecont < t->linha){ //condição de parada para a peça não sair pra fora por baixo
-            moverPeca(p, t);
-            descerPeca(p, t);
-            imprimirTela(t, 1);
-        }
     }
-    else {
-        while(p->linha + descecont < t->linha){ //condição de parada para a peça não sair pra fora por baixo
-            moverPeca(p, t);
-            descerPeca(p, t);
-            imprimirTela(t, 1);
-        }
+    
+    while(p->linha + descecont < t->linha){ //condição de parada para a peça não sair pra fora por baixo
+        moverPeca(p, t, descecont);
+        descerPeca(p, t, descecont);
+        imprimirTela(t, 1);
     }
+       
 }
 
 int main(int argc, char** argv) {
@@ -348,7 +343,7 @@ int main(int argc, char** argv) {
     
     alocarPeca(&p);
     
-    //for(i = 0; i < 2; i++){
+    for(i = 0; i < 2; i++){
         lerTela(&t, entrada);
         alocarTela(&t);
         preencherTela(&t);
@@ -365,11 +360,10 @@ int main(int argc, char** argv) {
 
         gerarSaida(&t, saida, &p);
         desalocarMovimentos(&p);
-        desalocarPeca(&p);
         desalocarTela(&t);
-    //}
+    }
     
-    
+    desalocarPeca(&p);
     
     fclose(entrada);
     fclose(saida);
