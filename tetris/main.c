@@ -161,16 +161,46 @@ void desalocarPeca(peca * p){
     
 }
 
-void inserirPeca(peca *p, tela *t){
+int inserirPeca(peca *p, tela *t){
     
-    int i, j;
+    int i, j, inseriu;
     
     //inserindo peça na tela
-    for(i = 0; i < 3; i++){
-        for(j = 0; j < 3; j++){
-            t->tela[p->linha + i][p->coluna + j] = p->peca[i][j];
-        }
+    if(t->tela[p->linha + 2][p->coluna + 0] == '.' && t->tela[p->linha + 2][p->coluna + 1] == '.' && t->tela[p->linha + 2][p->coluna + 2] == '.' && t->tela[p->linha + 1][p->coluna + 0] == '.' && t->tela[p->linha + 1][p->coluna + 1] == '.' && t->tela[p->linha + 1][p->coluna + 2] == '.' && t->tela[p->linha][p->coluna + 0] == '.' && t->tela[p->linha][p->coluna + 1] == '.' && t->tela[p->linha][p->coluna + 2] == '.'){
+        t->tela[p->linha + 2][p->coluna + 0] = p->peca[2][0];
+        t->tela[p->linha + 2][p->coluna + 1] = p->peca[2][1];
+        t->tela[p->linha + 2][p->coluna + 2] = p->peca[2][2];
+        t->tela[p->linha + 1][p->coluna + 0] = p->peca[1][0];
+        t->tela[p->linha + 1][p->coluna + 1] = p->peca[1][1];
+        t->tela[p->linha + 1][p->coluna + 2] = p->peca[1][2];
+        t->tela[p->linha][p->coluna + 0] = p->peca[0][0];
+        t->tela[p->linha][p->coluna + 1] = p->peca[0][1];
+        t->tela[p->linha][p->coluna + 2] = p->peca[0][2];
+        
+        inseriu = 1;
     }
+    else if(t->tela[p->linha + 1][p->coluna + 0] == '.' && t->tela[p->linha + 1][p->coluna + 1] == '.' && t->tela[p->linha + 1][p->coluna + 2] == '.' && t->tela[p->linha][p->coluna + 0] == '.' && t->tela[p->linha][p->coluna + 1] == '.' && t->tela[p->linha][p->coluna + 2] == '.'){
+        t->tela[p->linha + 1][p->coluna + 0] = p->peca[2][0];
+        t->tela[p->linha + 1][p->coluna + 1] = p->peca[2][1];
+        t->tela[p->linha + 1][p->coluna + 2] = p->peca[2][2];
+        t->tela[p->linha][p->coluna + 0] = p->peca[1][0];
+        t->tela[p->linha][p->coluna + 1] = p->peca[1][1];
+        t->tela[p->linha][p->coluna + 2] = p->peca[1][2];
+        
+        inseriu = 1;
+    }
+    else if(t->tela[p->linha][p->coluna + 0] == '.' && t->tela[p->linha][p->coluna + 1] == '.' && t->tela[p->linha][p->coluna + 2] == '.'){
+        t->tela[p->linha][p->coluna + 0] = p->peca[2][0];
+        t->tela[p->linha][p->coluna + 1] = p->peca[2][1];
+        t->tela[p->linha][p->coluna + 2] = p->peca[2][2];
+        
+        inseriu = 1;
+    }
+    else {
+        inseriu = 0;
+    }
+    
+    return(inseriu);
 }
 
 void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
@@ -303,6 +333,51 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
 
 }
 
+//int limitesPecaEsq(peca * p, int limiteEsq[3]){
+//    
+//    //col1
+//    if(p->peca[2][0] != '.'){
+//        limiteEsq[0] = 2;
+//    }
+//    else if(p->peca[1][0] != '.'){
+//        limiteEsq[0] = 1;
+//    }
+//    else if(p->peca[0][0] != '.'){
+//        limiteEsq[0] = 0;
+//    }
+//    else {
+//        limiteEsq[0] = -1;
+//    }
+//    
+//    //col2
+//    if(p->peca[2][1] != '.'){
+//        limiteEsq[1] = 2;
+//    }
+//    else if(p->peca[1][1] != '.'){
+//        limiteEsq[1] = 1;
+//    }
+//    else if(p->peca[0][1] != '.'){
+//        limiteEsq[1] = 0;
+//    }
+//    else {
+//        limiteEsq[0] = -1;
+//    }
+//    
+//    //col3
+//    if(p->peca[2][2] != '.'){
+//        limiteEsq[2] = 2;
+//    }
+//    else if(p->peca[1][2] != '.'){
+//        limiteEsq[2] = 1;
+//    }
+//    else if(p->peca[0][2] != '.'){
+//        limiteEsq[2] = 0;
+//    }
+//    else {
+//        limiteEsq[0] = -1;
+//    }
+//}
+
 int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
     
     //col1
@@ -370,8 +445,6 @@ void rodarMovimentos(peca *p, tela *t){
     while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora por baixo
         
         if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') && (t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') && (t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.'))){
-            
-
             moverPeca(p, t, descecont, limiteBaixo);
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
@@ -386,7 +459,7 @@ void rodarMovimentos(peca *p, tela *t){
 
 int main(int argc, char** argv) {
     
-    int i;
+    int i, inseriu, pararLoop = 0;
     tela t;
     peca p;
     char condicao;
@@ -410,17 +483,35 @@ int main(int argc, char** argv) {
         while(t.qtdPeca > 0){
             p.linha = 0; //sempre começa com zero
             lerPeca(&t, entrada, &p);
-            inserirPeca(&p, &t);
-            imprimirTela(&t, 1);
-            p.movimentosIndice = 0;
-            rodarMovimentos(&p, &t);
+            inseriu = inserirPeca(&p, &t);
+            
+            if(inseriu){
+                imprimirTela(&t, 1);
+                p.movimentosIndice = 0;
+                rodarMovimentos(&p, &t);
+            }
+            else {
+                pararLoop = 1;
+            }
+            
+            if(pararLoop){
+                break;
+            }   
         }
-
+        
         gerarSaida(&t, saida, &p);
+        
+        system("clear");
+        printf("\n\tSaída gerada com sucesso!\n\n");
+        
         desalocarMovimentos(&p);
         desalocarTela(&t);
         
         condicao = fgetc(entrada);
+        
+        if(pararLoop){
+            break;
+        } 
     }
     
     desalocarPeca(&p);
