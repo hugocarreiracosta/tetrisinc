@@ -173,100 +173,50 @@ void inserirPeca(peca *p, tela *t){
     }
 }
 
-void descerPeca(peca * p, tela * t, int tipoDescida){
+void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
     
     int i, j;
     
     if(tipoDescida == 3){
-        
-//        if(t->tela[p->linha + 3][p->coluna] == '.'){
-//            t->tela[p->linha + 3][p->coluna] = t->tela[p->linha + 2][p->coluna];
-//            t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
-//            t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-//            t->tela[p->linha][p->coluna] = '.';
-//        }
-//        else if(t->tela[p->linha + 2][p->coluna] == '.'){
-//            t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
-//            t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-//            t->tela[p->linha][p->coluna] = '.';
-//        }
-//        else if(t->tela[p->linha + 1][p->coluna] == '.'){
-//            t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-//            t->tela[p->linha][p->coluna] = '.';
-//        }
-//        
-//        if(t->tela[p->linha + 3][p->coluna + 1] == '.'){
-//            t->tela[p->linha + 3][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 1];
-//            t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
-//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-//            t->tela[p->linha][p->coluna + 1] = '.';
-//        }
-//        else if(t->tela[p->linha + 2][p->coluna + 1] == '.'){
-//            t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
-//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-//            t->tela[p->linha][p->coluna + 1] = '.';
-//        }
-//        else if(t->tela[p->linha + 1][p->coluna + 1] == '.'){
-//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-//            t->tela[p->linha][p->coluna + 1] = '.';
-//        }
-//        
-//        if(t->tela[p->linha + 3][p->coluna + 2] == '.'){
-//            t->tela[p->linha + 3][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 2];
-//            t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
-//            t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
-//            t->tela[p->linha][p->coluna + 2] = '.';
-//        }
-//        else if(t->tela[p->linha + 2][p->coluna + 2] == '.'){
-//            t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
-//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-//            t->tela[p->linha][p->coluna + 1] = '.';
-//        }
-//        else if(t->tela[p->linha + 1][p->coluna + 2] == '.'){
-//            t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-//            t->tela[p->linha][p->coluna + 1] = '.';
-//        }
-        t->tela[p->linha + 3][p->coluna] = t->tela[p->linha + 2][p->coluna];
-        t->tela[p->linha + 3][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 1];
-        t->tela[p->linha + 3][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 2];
-        
-        t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
-        t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
-        t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
-        
-        t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-        t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-        t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
-        
-        t->tela[p->linha][p->coluna] = '.';
+        for(i = 3; i > 0; i--){
+            for(j = 0; j < 3; j++){
+                if((i-1) <= limiteBaixo[j]){
+                    t->tela[p->linha + i][p->coluna + j] = t->tela[p->linha + (i - 1)][p->coluna + j];
+                }
+            }
+        }
+    
+        t->tela[p->linha][p->coluna] = '.';;
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
     }
     else if(tipoDescida == 2){
-        t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 1][p->coluna];
-        t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 1];
-        t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 2];
-        
-        t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-        t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-        t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
-        
-        t->tela[p->linha][p->coluna] = '.';
+        for(i = 2; i > 0; i--){
+            for(j = 0; j < 3; j++){
+                if((i-1) <= limiteBaixo[j]){
+                    t->tela[p->linha + i][p->coluna + j] = t->tela[p->linha + (i - 1)][p->coluna + j];
+                }
+            }
+        }
+    
+        t->tela[p->linha][p->coluna] = '.';;
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
     }
     else if(tipoDescida == 1){
-        
-        t->tela[p->linha + 1][p->coluna] = t->tela[p->linha][p->coluna];
-        t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha][p->coluna + 1];
-        t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha][p->coluna + 2];
-        
-        t->tela[p->linha][p->coluna] = '.';
+        for(i = 1; i > 0; i--){
+            for(j = 0; j < 3; j++){
+                if((i-1) <= limiteBaixo[j]){
+                    t->tela[p->linha + i][p->coluna + j] = t->tela[p->linha + (i - 1)][p->coluna + j];
+                }
+            }
+        }
+    
+        t->tela[p->linha][p->coluna] = '.';;
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
     }
     else if(tipoDescida == 0){
-        
         t->tela[p->linha][p->coluna] = '.';
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
@@ -275,7 +225,7 @@ void descerPeca(peca * p, tela * t, int tipoDescida){
     p->linha += 1;
 }
 
-void moverPeca(peca * p, tela * t, int tipoDescida){
+void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
     
     int i, j, moveu = 0, desceu = 0;
     
@@ -322,7 +272,7 @@ void moverPeca(peca * p, tela * t, int tipoDescida){
     }
     else if(p->movimentos[p->movimentosIndice] == 'b'){ //movimento p/ BAIXO
         if(p->linha + 2 < t->linha){ //if para a peça não sair pra fora por baixo
-            descerPeca(p, t, tipoDescida);
+            descerPeca(p, t, tipoDescida, limiteBaixo);
         }
         moveu = 1;
         desceu = 1;
@@ -353,54 +303,54 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
 
 }
 
-int limitesPeca(peca * p, int limite[3]){
+int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
     
     //col1
     if(p->peca[2][0] != '.'){
-        limite[0] = 2;
+        limiteBaixo[0] = 2;
     }
     else if(p->peca[1][0] != '.'){
-        limite[0] = 1;
+        limiteBaixo[0] = 1;
     }
     else if(p->peca[0][0] != '.'){
-        limite[0] = 0;
+        limiteBaixo[0] = 0;
     }
     else {
-        limite[0] = -1;
+        limiteBaixo[0] = -1;
     }
     
     //col2
     if(p->peca[2][1] != '.'){
-        limite[1] = 2;
+        limiteBaixo[1] = 2;
     }
     else if(p->peca[1][1] != '.'){
-        limite[1] = 1;
+        limiteBaixo[1] = 1;
     }
     else if(p->peca[0][1] != '.'){
-        limite[1] = 0;
+        limiteBaixo[1] = 0;
     }
     else {
-        limite[0] = -1;
+        limiteBaixo[0] = -1;
     }
     
     //col3
     if(p->peca[2][2] != '.'){
-        limite[2] = 2;
+        limiteBaixo[2] = 2;
     }
     else if(p->peca[1][2] != '.'){
-        limite[2] = 1;
+        limiteBaixo[2] = 1;
     }
     else if(p->peca[0][2] != '.'){
-        limite[2] = 0;
+        limiteBaixo[2] = 0;
     }
     else {
-        limite[0] = -1;
+        limiteBaixo[0] = -1;
     }
 }
 
 void rodarMovimentos(peca *p, tela *t){
     
-    int limites[3], descecont = 3;
+    int limiteBaixo[3], descecont = 3;
     
     if((p->peca[2][0] == '.') && (p->peca[2][1] == '.') && (p->peca[2][2] == '.')){
         descecont--; //2x3
@@ -412,16 +362,18 @@ void rodarMovimentos(peca *p, tela *t){
         }
     }
     
-    limitesPeca(p, limites);
+    limitesPecaBaixo(p, limiteBaixo);
     
     int linhaLimite = t->linha;
 
     
     while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora por baixo
         
-        if(((t->tela[p->linha + limites[0] + 1][p->coluna] == '.') && (t->tela[p->linha + limites[1] + 1][p->coluna + 1] == '.') && (t->tela[p->linha + limites[2] + 1][p->coluna + 2] == '.'))){
-            moverPeca(p, t, descecont);
-            descerPeca(p, t, descecont);
+        if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') && (t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') && (t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.'))){
+            
+
+            moverPeca(p, t, descecont, limiteBaixo);
+            descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
         }
         else {
