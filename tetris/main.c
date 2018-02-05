@@ -254,17 +254,17 @@ void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limi
         if(p->movimentos[p->movimentosIndice] == 'd'){ //movimento p/ DIRETA
             if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
                 
-                for(j = 3; j > -1; j--){
-                    for (i = 0; i < 3; i++) {
-                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j-1)];
-                        t->tela[p->linha + i][p->coluna] = '.';
-                    }
-                    
-                }
-                p->coluna += 1;
+//                for(j = 3; j > 0; j--){
+//                    for (i = 0; i < 3; i++) {
+//                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j-1)];
+//                        t->tela[p->linha + i][p->coluna] = '.';
+//                    }
+//                    
+//                }
+//                p->coluna += 1;
                 
 
-                /* 
+                
                 t->tela[p->linha][p->coluna + 3] = t->tela[p->linha][p->coluna + 2];
                 t->tela[p->linha + 1][p->coluna + 3] = t->tela[p->linha + 1][p->coluna + 2];
                 t->tela[p->linha + 2][p->coluna + 3] = t->tela[p->linha + 2][p->coluna + 2];
@@ -277,25 +277,25 @@ void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limi
                 t->tela[p->linha][p->coluna] = '.';
                 t->tela[p->linha + 1][p->coluna] = '.';
                 t->tela[p->linha + 2][p->coluna] = '.';
-                 */
+                
 
-//                p->coluna += 1;
+               p->coluna += 1;
             }
             moveu = 1;
         }
         else if(p->movimentos[p->movimentosIndice] == 'e'){ //movimento p/ ESQUERDA
             if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
 
-                for(j = -1; j < 3; j++){
-                    for (i = 0; i < 3; i++) {
-                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j+1)];
-                        t->tela[p->linha + i][p->coluna + 2] = '.';
-                    }
-                    
-                }
-                p->coluna -= 1;
+//                for(j = -1; j < 2; j++){
+//                    for (i = 0; i < 3; i++) {
+//                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j+1)];
+//                        t->tela[p->linha + i][p->coluna + 2] = '.';
+//                    }
+//                    
+//                }
+//                p->coluna -= 1;
                 
-                /*
+                
                 t->tela[p->linha][p->coluna - 1] = t->tela[p->linha][p->coluna];
                 t->tela[p->linha + 1][p->coluna - 1] = t->tela[p->linha + 1][p->coluna];
                 t->tela[p->linha + 2][p->coluna - 1] = t->tela[p->linha + 2][p->coluna];
@@ -310,7 +310,7 @@ void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limi
                 t->tela[p->linha + 2][p->coluna + 2] = '.';
 
                 p->coluna -= 1;
-                */
+                
             }
             moveu = 1;
         }
@@ -348,95 +348,95 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
     fprintf(saida, "\n");
 }
 
-int limitesPecaEsq(peca * p, int limiteEsq[3]){
+int limitesPecaDir(peca * p, int limiteDir[3]){
    
     //col 1
     if(p->peca[2][0] != '.'){
-        limiteEsq[2] = 2;
-    }
-    else if(p->peca[2][1] != '.'){
-        limiteEsq[2] = 1;
-    }
-    else if(p->peca[2][2] != '.'){
-        limiteEsq[2] = 0;
-    }
-    else {
-        limiteEsq[2] = -1;
-    }
-    
-   
-    //col 1
-    if(p->peca[1][0] != '.'){
-        limiteEsq[1] = 2;
-    }
-    else if(p->peca[1][1] != '.'){
-        limiteEsq[1] = 1;
-    }
-    else if(p->peca[1][2] != '.'){
-        limiteEsq[1] = 0;
-    }
-    else {
-        limiteEsq[1] = -1;
-    }
-    
-    
-    //col 1
-    if(p->peca[0][0] != '.'){
-        limiteEsq[0] = 2;
-    }
-    else if(p->peca[0][1] != '.'){
-        limiteEsq[0] = 1;
-    }
-    else if(p->peca[0][2] != '.'){
-        limiteEsq[0] = 0;
-    }
-    else {
-        limiteEsq[0] = -1;
-    }
-}
-
-int limitesPecaDir(peca * p, int limiteDir[3]){
-   
-    //col 3
-    if(p->peca[2][2] != '.'){
         limiteDir[2] = 2;
     }
-    else if(p->peca[1][2] != '.'){
+    else if(p->peca[2][1] != '.'){
         limiteDir[2] = 1;
     }
-    else if(p->peca[0][2] != '.'){
+    else if(p->peca[2][2] != '.'){
         limiteDir[2] = 0;
     }
     else {
         limiteDir[2] = -1;
     }
     
-    //col 2
-    if(p->peca[1][2] != '.'){
+   
+    //col 1
+    if(p->peca[1][0] != '.'){
         limiteDir[1] = 2;
     }
     else if(p->peca[1][1] != '.'){
         limiteDir[1] = 1;
     }
-    else if(p->peca[1][0] != '.'){
+    else if(p->peca[1][2] != '.'){
         limiteDir[1] = 0;
     }
     else {
         limiteDir[1] = -1;
     }
     
+    
     //col 1
-    if(p->peca[0][2] != '.'){
+    if(p->peca[0][0] != '.'){
         limiteDir[0] = 2;
     }
     else if(p->peca[0][1] != '.'){
         limiteDir[0] = 1;
     }
-    else if(p->peca[0][0] != '.'){
+    else if(p->peca[0][2] != '.'){
         limiteDir[0] = 0;
     }
     else {
         limiteDir[0] = -1;
+    }
+}
+
+int limitesPecaEsq(peca * p, int limiteEsq[3]){
+   
+    //col 3
+    if(p->peca[2][2] != '.'){
+        limiteEsq[2] = 0;
+    }
+    else if(p->peca[1][2] != '.'){
+        limiteEsq[2] = 1;
+    }
+    else if(p->peca[0][2] != '.'){
+        limiteEsq[2] = 2;
+    }
+    else {
+        limiteEsq[2] = -1;
+    }
+    
+    //col 2
+    if(p->peca[1][2] != '.'){
+        limiteEsq[1] = 0;
+    }
+    else if(p->peca[1][1] != '.'){
+        limiteEsq[1] = 1;
+    }
+    else if(p->peca[1][0] != '.'){
+        limiteEsq[1] = 3;
+    }
+    else {
+        limiteEsq[1] = -1;
+    }
+    
+    //col 1
+    if(p->peca[0][2] != '.'){
+        limiteEsq[0] = 0;
+    }
+    else if(p->peca[0][1] != '.'){
+        limiteEsq[0] = 1;
+    }
+    else if(p->peca[0][0] != '.'){
+        limiteEsq[0] = 2;
+    }
+    else {
+        limiteEsq[0] = -1;
     }
     
    
@@ -517,7 +517,19 @@ void rodarMovimentos(peca *p, tela *t){
         if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') || limiteBaixo[0] == -1 )&&
             ((t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') || limiteBaixo[1] == -1)&&
             ((t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.') || limiteBaixo[2] == -1 )){
-            moverPeca(p, t, descecont, limiteBaixo, limiteEsq, limiteDir);
+            
+        if( ((t->tela[p->linha + 2][p->coluna + limiteDir[0] + 1] == '.') || limiteDir[0] == -1 ) &&
+              ((t->tela[p->linha + 1][p->coluna + limiteDir[1] + 1] == '.') || limiteDir[1] == -1 ) &&
+              ((t->tela[p->linha][p->coluna + limiteDir[2] + 1] == '.') || limiteDir[2] == -1 )){
+             moverPeca(p, t, descecont, limiteBaixo, limiteEsq, limiteDir);
+        }
+        
+        if( ((t->tela[p->linha + 2][p->coluna + limiteEsq[0] - 1] == '.') || limiteEsq[0] == -1 ) &&
+              ((t->tela[p->linha + 1][p->coluna + limiteEsq[1] - 1] == '.') || limiteEsq[1] == -1 ) &&
+              ((t->tela[p->linha][p->coluna + limiteEsq[2] - 1] == '.') || limiteEsq[2] == -1 )){
+             moverPeca(p, t, descecont, limiteBaixo, limiteEsq, limiteDir);
+        }
+        
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
         }
