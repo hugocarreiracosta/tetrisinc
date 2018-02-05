@@ -254,62 +254,62 @@ void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limi
         if(p->movimentos[p->movimentosIndice] == 'd'){ //movimento p/ DIRETA
             if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
                 
-//                for(j = 3; j > 0; j--){
-//                    for (i = 0; i < 3; i++) {
-//                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j-1)];
-//                        t->tela[p->linha + i][p->coluna] = '.';
-//                    }
-//                    
-//                }
-//                p->coluna += 1;
+                for(j = 3; j > 0; j--){
+                    for (i = 0; i < 3; i++) {
+                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j-1)];
+                        t->tela[p->linha + i][p->coluna+ (j-1)] = '.';
+                    }
+                    
+                }
+                p->coluna += 1;
                 
 
                 
-                t->tela[p->linha][p->coluna + 3] = t->tela[p->linha][p->coluna + 2];
-                t->tela[p->linha + 1][p->coluna + 3] = t->tela[p->linha + 1][p->coluna + 2];
-                t->tela[p->linha + 2][p->coluna + 3] = t->tela[p->linha + 2][p->coluna + 2];
-                t->tela[p->linha][p->coluna + 2] = t->tela[p->linha][p->coluna + 1];
-                t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 1];
-                t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 1];
-                t->tela[p->linha][p->coluna + 1] = t->tela[p->linha][p->coluna];
-                t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha + 1][p->coluna];
-                t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 2][p->coluna];
-                t->tela[p->linha][p->coluna] = '.';
-                t->tela[p->linha + 1][p->coluna] = '.';
-                t->tela[p->linha + 2][p->coluna] = '.';
+//                t->tela[p->linha][p->coluna + 3] = t->tela[p->linha][p->coluna + 2];
+//                t->tela[p->linha + 1][p->coluna + 3] = t->tela[p->linha + 1][p->coluna + 2];
+//                t->tela[p->linha + 2][p->coluna + 3] = t->tela[p->linha + 2][p->coluna + 2];
+//                t->tela[p->linha][p->coluna + 2] = t->tela[p->linha][p->coluna + 1];
+//                t->tela[p->linha + 1][p->coluna + 2] = t->tela[p->linha + 1][p->coluna + 1];
+//                t->tela[p->linha + 2][p->coluna + 2] = t->tela[p->linha + 2][p->coluna + 1];
+//                t->tela[p->linha][p->coluna + 1] = t->tela[p->linha][p->coluna];
+//                t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha + 1][p->coluna];
+//                t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 2][p->coluna];
+//                t->tela[p->linha][p->coluna] = '.';
+//                t->tela[p->linha + 1][p->coluna] = '.';
+//                t->tela[p->linha + 2][p->coluna] = '.';
                 
 
-               p->coluna += 1;
+               //p->coluna += 1;
             }
             moveu = 1;
         }
         else if(p->movimentos[p->movimentosIndice] == 'e'){ //movimento p/ ESQUERDA
             if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
 
-//                for(j = -1; j < 2; j++){
-//                    for (i = 0; i < 3; i++) {
-//                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j+1)];
-//                        t->tela[p->linha + i][p->coluna + 2] = '.';
-//                    }
-//                    
-//                }
-//                p->coluna -= 1;
-                
-                
-                t->tela[p->linha][p->coluna - 1] = t->tela[p->linha][p->coluna];
-                t->tela[p->linha + 1][p->coluna - 1] = t->tela[p->linha + 1][p->coluna];
-                t->tela[p->linha + 2][p->coluna - 1] = t->tela[p->linha + 2][p->coluna];
-                t->tela[p->linha][p->coluna] = t->tela[p->linha][p->coluna + 1];
-                t->tela[p->linha + 1][p->coluna] = t->tela[p->linha + 1][p->coluna + 1];
-                t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 2][p->coluna + 1];
-                t->tela[p->linha][p->coluna + 1] = t->tela[p->linha][p->coluna + 2];
-                t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 2];
-                t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 2];
-                t->tela[p->linha][p->coluna + 2] = '.';
-                t->tela[p->linha + 1][p->coluna + 2] = '.';
-                t->tela[p->linha + 2][p->coluna + 2] = '.';
-
+                for(j = -1; j < 2; j++){
+                    for (i = 0; i < 3; i++) {
+                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j+1)];
+                        t->tela[p->linha + i][p->coluna+ (j+1)] = '.';
+                    }
+                    
+                }
                 p->coluna -= 1;
+                
+                
+//                t->tela[p->linha][p->coluna - 1] = t->tela[p->linha][p->coluna];
+//                t->tela[p->linha + 1][p->coluna - 1] = t->tela[p->linha + 1][p->coluna];
+//                t->tela[p->linha + 2][p->coluna - 1] = t->tela[p->linha + 2][p->coluna];
+//                t->tela[p->linha][p->coluna] = t->tela[p->linha][p->coluna + 1];
+//                t->tela[p->linha + 1][p->coluna] = t->tela[p->linha + 1][p->coluna + 1];
+//                t->tela[p->linha + 2][p->coluna] = t->tela[p->linha + 2][p->coluna + 1];
+//                t->tela[p->linha][p->coluna + 1] = t->tela[p->linha][p->coluna + 2];
+//                t->tela[p->linha + 1][p->coluna + 1] = t->tela[p->linha + 1][p->coluna + 2];
+//                t->tela[p->linha + 2][p->coluna + 1] = t->tela[p->linha + 2][p->coluna + 2];
+//                t->tela[p->linha][p->coluna + 2] = '.';
+//                t->tela[p->linha + 1][p->coluna + 2] = '.';
+//                t->tela[p->linha + 2][p->coluna + 2] = '.';
+//
+//                p->coluna -= 1;
                 
             }
             moveu = 1;
@@ -524,11 +524,11 @@ void rodarMovimentos(peca *p, tela *t){
              moverPeca(p, t, descecont, limiteBaixo, limiteEsq, limiteDir);
         }
         
-        if( ((t->tela[p->linha + 2][p->coluna + limiteEsq[0] - 1] == '.') || limiteEsq[0] == -1 ) &&
-              ((t->tela[p->linha + 1][p->coluna + limiteEsq[1] - 1] == '.') || limiteEsq[1] == -1 ) &&
-              ((t->tela[p->linha][p->coluna + limiteEsq[2] - 1] == '.') || limiteEsq[2] == -1 )){
+//        if( ((t->tela[p->linha + 2][p->coluna + limiteEsq[0] - 1] == '.') || limiteEsq[0] == -1 ) &&
+//              ((t->tela[p->linha + 1][p->coluna + limiteEsq[1] - 1] == '.') || limiteEsq[1] == -1 ) &&
+//              ((t->tela[p->linha][p->coluna + limiteEsq[2] - 1] == '.') || limiteEsq[2] == -1 )){
              moverPeca(p, t, descecont, limiteBaixo, limiteEsq, limiteDir);
-        }
+//        }
         
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
