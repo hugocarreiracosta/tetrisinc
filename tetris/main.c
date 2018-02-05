@@ -438,7 +438,7 @@ void rodarMovimentos(peca *p, tela *t){
     while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora da tela por baixo
         
         //condição para a peça só descer se a posição abaixo do último caractere de cada coluna da peça estiver preenchida por ponto
-        if((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') && (t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') && (t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.')){
+        if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') || limiteBaixo[0] == -1 )&& ((t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.' || limiteBaixo[1] == -1 )) && ((t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.' || limiteBaixo[2] == -1 ))){
             moverPeca(p, t, descecont, limiteBaixo);
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
