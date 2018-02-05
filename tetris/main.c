@@ -244,15 +244,27 @@ void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
     p->linha += 1;
 }
 
-void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
+void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limiteEsq[3]){
     
     int i, j, moveu = 0, desceu = 0;
     
     if(p->movimentosIndice < p->qtMovimentos){
         //movimentar
+        
         if(p->movimentos[p->movimentosIndice] == 'd'){ //movimento p/ DIRETA
             if(p->coluna + 1 < t->coluna - 2){ //if para a peça não sair pra fora pela direita
+                
+                for(j = 3; j > -1; j--){
+                    for (i = 0; i < 3; i++) {
+                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j-1)];
+                        t->tela[p->linha + i][p->coluna] = '.';
+                    }
+                    
+                }
+                p->coluna += 1;
+                
 
+                /* 
                 t->tela[p->linha][p->coluna + 3] = t->tela[p->linha][p->coluna + 2];
                 t->tela[p->linha + 1][p->coluna + 3] = t->tela[p->linha + 1][p->coluna + 2];
                 t->tela[p->linha + 2][p->coluna + 3] = t->tela[p->linha + 2][p->coluna + 2];
@@ -265,14 +277,25 @@ void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
                 t->tela[p->linha][p->coluna] = '.';
                 t->tela[p->linha + 1][p->coluna] = '.';
                 t->tela[p->linha + 2][p->coluna] = '.';
+                 */
 
-                p->coluna += 1;
+//                p->coluna += 1;
             }
             moveu = 1;
         }
         else if(p->movimentos[p->movimentosIndice] == 'e'){ //movimento p/ ESQUERDA
             if(p->coluna - 1 > -1){ //if para a peça não sair pra fora pela esquerda
 
+                for(j = -1; j < 3; j++){
+                    for (i = 0; i < 3; i++) {
+                        t->tela[p->linha + i][p->coluna+ j] = t->tela[p->linha + i][p->coluna+ (j+1)];
+                        t->tela[p->linha + i][p->coluna + 2] = '.';
+                    }
+                    
+                }
+                p->coluna -= 1;
+                
+                /*
                 t->tela[p->linha][p->coluna - 1] = t->tela[p->linha][p->coluna];
                 t->tela[p->linha + 1][p->coluna - 1] = t->tela[p->linha + 1][p->coluna];
                 t->tela[p->linha + 2][p->coluna - 1] = t->tela[p->linha + 2][p->coluna];
@@ -287,6 +310,7 @@ void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
                 t->tela[p->linha + 2][p->coluna + 2] = '.';
 
                 p->coluna -= 1;
+                */
             }
             moveu = 1;
         }
@@ -324,50 +348,33 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
     fprintf(saida, "\n");
 }
 
-//int limitesPecaEsq(peca * p, int limiteEsq[3]){
-//    
-//    //col1
-//    if(p->peca[2][0] != '.'){
-//        limiteEsq[0] = 2;
-//    }
-//    else if(p->peca[1][0] != '.'){
-//        limiteEsq[0] = 1;
-//    }
-//    else if(p->peca[0][0] != '.'){
-//        limiteEsq[0] = 0;
-//    }
-//    else {
-//        limiteEsq[0] = -1;
-//    }
-//    
-//    //col2
-//    if(p->peca[2][1] != '.'){
-//        limiteEsq[1] = 2;
-//    }
-//    else if(p->peca[1][1] != '.'){
-//        limiteEsq[1] = 1;
-//    }
-//    else if(p->peca[0][1] != '.'){
-//        limiteEsq[1] = 0;
-//    }
-//    else {
-//        limiteEsq[0] = -1;
-//    }
-//    
-//    //col3
-//    if(p->peca[2][2] != '.'){
-//        limiteEsq[2] = 2;
-//    }
-//    else if(p->peca[1][2] != '.'){
-//        limiteEsq[2] = 1;
-//    }
-//    else if(p->peca[0][2] != '.'){
-//        limiteEsq[2] = 0;
-//    }
-//    else {
-//        limiteEsq[0] = -1;
-//    }
-//}
+int limitesPecaEsq(peca * p, int limiteEsq[3]){
+   
+    //col1
+    if((p->peca[2][0] != '.') && (p->peca[1][0] != '.') && (p->peca[0][0] != '.')){
+        limiteEsq[0] = 2;
+    }
+    else {
+        limiteEsq[0] = -1;
+    }
+    
+    //col2
+    if((p->peca[2][1] != '.') && (p->peca[1][1] != '.') && (p->peca[0][1] != '.')){
+        limiteEsq[1] = 1;
+    }
+    else {
+        limiteEsq[1] = -1;
+    }
+    
+    //col3
+    if((p->peca[2][2] != '.') && (p->peca[1][2] != '.') && (p->peca[0][2] != '.')){
+        limiteEsq[2] = 0;
+    }
+    else {
+        limiteEsq[2] = -1;
+    }
+    
+}
 
 int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
     
@@ -418,7 +425,7 @@ int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
 
 void rodarMovimentos(peca *p, tela *t){
     
-    int limiteBaixo[3], descecont = 3;
+    int limiteBaixo[3], descecont = 3, limiteEsq[3];
     
     if((p->peca[2][0] == '.') && (p->peca[2][1] == '.') && (p->peca[2][2] == '.')){
         descecont--; //2x3
@@ -431,6 +438,7 @@ void rodarMovimentos(peca *p, tela *t){
     }
     
     limitesPecaBaixo(p, limiteBaixo);
+    limitesPecaEsq(p, limiteEsq);
     
     int linhaLimite = t->linha;
 
@@ -438,11 +446,15 @@ void rodarMovimentos(peca *p, tela *t){
     while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora da tela por baixo
         
         //condição para a peça só descer se a posição abaixo do último caractere de cada coluna da peça estiver preenchida por ponto
-        if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') || limiteBaixo[0] == -1 )&& ((t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.' || limiteBaixo[1] == -1 )) && ((t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.' || limiteBaixo[2] == -1 ))){
-            moverPeca(p, t, descecont, limiteBaixo);
+        if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') || limiteBaixo[0] == -1 )&&
+            ((t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') || limiteBaixo[1] == -1)&&
+            ((t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.') || limiteBaixo[2] == -1 )){
+            moverPeca(p, t, descecont, limiteBaixo, limiteEsq);
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
         }
+        
+        
         //else para parar a descida da peça caso ela encontre caracteres diferentes de ponto abaixo
         else {
             linhaLimite = 0;
