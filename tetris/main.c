@@ -207,6 +207,7 @@ void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
     
     int i, j;
     
+    //descida para peças preenchidas até a 3a linha
     if(tipoDescida == 3){
         for(i = 3; i > 0; i--){
             for(j = 0; j < 3; j++){
@@ -220,6 +221,7 @@ void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
     }
+    //descida para peças preenchidas até a 2a linha
     else if(tipoDescida == 2){
         for(i = 2; i > 0; i--){
             for(j = 0; j < 3; j++){
@@ -233,6 +235,7 @@ void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
     }
+    //descida para peças preenchidas até a 1a linha
     else if(tipoDescida == 1){
         for(i = 1; i > 0; i--){
             for(j = 0; j < 3; j++){
@@ -243,11 +246,6 @@ void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
         }
     
         t->tela[p->linha][p->coluna] = '.';;
-        t->tela[p->linha][p->coluna + 1] = '.';
-        t->tela[p->linha][p->coluna + 2] = '.';
-    }
-    else if(tipoDescida == 0){
-        t->tela[p->linha][p->coluna] = '.';
         t->tela[p->linha][p->coluna + 1] = '.';
         t->tela[p->linha][p->coluna + 2] = '.';
     }
@@ -325,12 +323,10 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
     for(i = 0; i < t->linha; i++){
         for(j = 0; j < t->coluna; j++){
             fprintf(saida, "%c", t->tela[i][j]);
-            //fprintf(saida, "\n");
         }
         fprintf(saida, "\n");
     }
     fprintf(saida, "\n");
-
 }
 
 //int limitesPecaEsq(peca * p, int limiteEsq[3]){
@@ -380,7 +376,9 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
 
 int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
     
-    //col1
+    //encontrar última linha preenchida de cada coluna da peça
+    
+    //col 1
     if(p->peca[2][0] != '.'){
         limiteBaixo[0] = 2;
     }
@@ -394,7 +392,7 @@ int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
         limiteBaixo[0] = -1;
     }
     
-    //col2
+    //col 2
     if(p->peca[2][1] != '.'){
         limiteBaixo[1] = 2;
     }
@@ -405,10 +403,10 @@ int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
         limiteBaixo[1] = 0;
     }
     else {
-        limiteBaixo[0] = -1;
+        limiteBaixo[1] = -1;
     }
     
-    //col3
+    //col 3
     if(p->peca[2][2] != '.'){
         limiteBaixo[2] = 2;
     }
@@ -419,7 +417,7 @@ int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
         limiteBaixo[2] = 0;
     }
     else {
-        limiteBaixo[0] = -1;
+        limiteBaixo[2] = -1;
     }
 }
 
@@ -442,13 +440,15 @@ void rodarMovimentos(peca *p, tela *t){
     int linhaLimite = t->linha;
 
     
-    while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora por baixo
+    while((p->linha + descecont < linhaLimite)){ //condição de parada para a peça não sair pra fora da tela por baixo
         
+        //condição para a peça só descer se a posição abaixo do último caractere de cada coluna da peça estiver preenchida por ponto
         if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') && (t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') && (t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.'))){
             moverPeca(p, t, descecont, limiteBaixo);
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
         }
+        //else para parar a descida da peça caso ela encontre caracteres diferentes de ponto abaixo
         else {
             linhaLimite = 0;
         }
@@ -474,6 +474,7 @@ int main(int argc, char** argv) {
     
     alocarPeca(&p);
     
+    //ler arquivo enquanto tiver conteúdo a ser lido
     while(condicao != EOF){
         lerTela(&t, entrada);
         alocarTela(&t);
@@ -483,6 +484,8 @@ int main(int argc, char** argv) {
         while(t.qtdPeca > 0){
             p.linha = 0; //sempre começa com zero
             lerPeca(&t, entrada, &p);
+            
+            //checagem para ver se a peça atual foi inserida com sucesso
             inseriu = inserirPeca(&p, &t);
             
             if(inseriu){
@@ -494,6 +497,7 @@ int main(int argc, char** argv) {
                 pararLoop = 1;
             }
             
+            //se a peça não foi inserida, é porque não há mais espaço na tela, encerrando assim o jogo
             if(pararLoop){
                 break;
             }   
@@ -507,11 +511,8 @@ int main(int argc, char** argv) {
         desalocarMovimentos(&p);
         desalocarTela(&t);
         
+        //checagem para ver se existe conteúdo a ser lido no arquivo
         condicao = fgetc(entrada);
-        
-        if(pararLoop){
-            break;
-        } 
     }
     
     desalocarPeca(&p);
