@@ -244,7 +244,7 @@ void descerPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3]){
     p->linha += 1;
 }
 
-void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limiteEsq[3]){
+void moverPeca(peca * p, tela * t, int tipoDescida, int limiteBaixo[3], int limiteEsq[3], int limiteDir[3]){
     
     int i, j, moveu = 0, desceu = 0;
     
@@ -350,31 +350,98 @@ void gerarSaida(tela * t, FILE * saida, peca * p){
 
 int limitesPecaEsq(peca * p, int limiteEsq[3]){
    
-    //col1
-    if((p->peca[2][0] != '.') && (p->peca[1][0] != '.') && (p->peca[0][0] != '.')){
-        limiteEsq[0] = 2;
+    //col 1
+    if(p->peca[2][0] != '.'){
+        limiteEsq[2] = 2;
     }
-    else {
-        limiteEsq[0] = -1;
+    else if(p->peca[2][1] != '.'){
+        limiteEsq[2] = 1;
     }
-    
-    //col2
-    if((p->peca[2][1] != '.') && (p->peca[1][1] != '.') && (p->peca[0][1] != '.')){
-        limiteEsq[1] = 1;
-    }
-    else {
-        limiteEsq[1] = -1;
-    }
-    
-    //col3
-    if((p->peca[2][2] != '.') && (p->peca[1][2] != '.') && (p->peca[0][2] != '.')){
+    else if(p->peca[2][2] != '.'){
         limiteEsq[2] = 0;
     }
     else {
         limiteEsq[2] = -1;
     }
     
+   
+    //col 1
+    if(p->peca[1][0] != '.'){
+        limiteEsq[1] = 2;
+    }
+    else if(p->peca[1][1] != '.'){
+        limiteEsq[1] = 1;
+    }
+    else if(p->peca[1][2] != '.'){
+        limiteEsq[1] = 0;
+    }
+    else {
+        limiteEsq[1] = -1;
+    }
+    
+    
+    //col 1
+    if(p->peca[0][0] != '.'){
+        limiteEsq[0] = 2;
+    }
+    else if(p->peca[0][1] != '.'){
+        limiteEsq[0] = 1;
+    }
+    else if(p->peca[0][2] != '.'){
+        limiteEsq[0] = 0;
+    }
+    else {
+        limiteEsq[0] = -1;
+    }
 }
+
+int limitesPecaDir(peca * p, int limiteDir[3]){
+   
+    //col 3
+    if(p->peca[2][2] != '.'){
+        limiteDir[2] = 2;
+    }
+    else if(p->peca[1][2] != '.'){
+        limiteDir[2] = 1;
+    }
+    else if(p->peca[0][2] != '.'){
+        limiteDir[2] = 0;
+    }
+    else {
+        limiteDir[2] = -1;
+    }
+    
+    //col 2
+    if(p->peca[1][2] != '.'){
+        limiteDir[1] = 2;
+    }
+    else if(p->peca[1][1] != '.'){
+        limiteDir[1] = 1;
+    }
+    else if(p->peca[1][0] != '.'){
+        limiteDir[1] = 0;
+    }
+    else {
+        limiteDir[1] = -1;
+    }
+    
+    //col 1
+    if(p->peca[0][2] != '.'){
+        limiteDir[0] = 2;
+    }
+    else if(p->peca[0][1] != '.'){
+        limiteDir[0] = 1;
+    }
+    else if(p->peca[0][0] != '.'){
+        limiteDir[0] = 0;
+    }
+    else {
+        limiteDir[0] = -1;
+    }
+    
+   
+}
+    
 
 int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
     
@@ -425,7 +492,7 @@ int limitesPecaBaixo(peca * p, int limiteBaixo[3]){
 
 void rodarMovimentos(peca *p, tela *t){
     
-    int limiteBaixo[3], descecont = 3, limiteEsq[3];
+    int limiteBaixo[3], descecont = 3, limiteEsq[3], limiteDir[3];
     
     if((p->peca[2][0] == '.') && (p->peca[2][1] == '.') && (p->peca[2][2] == '.')){
         descecont--; //2x3
@@ -439,6 +506,7 @@ void rodarMovimentos(peca *p, tela *t){
     
     limitesPecaBaixo(p, limiteBaixo);
     limitesPecaEsq(p, limiteEsq);
+    limitesPecaDir(p, limiteDir);
     
     int linhaLimite = t->linha;
 
@@ -449,7 +517,7 @@ void rodarMovimentos(peca *p, tela *t){
         if(((t->tela[p->linha + limiteBaixo[0] + 1][p->coluna] == '.') || limiteBaixo[0] == -1 )&&
             ((t->tela[p->linha + limiteBaixo[1] + 1][p->coluna + 1] == '.') || limiteBaixo[1] == -1)&&
             ((t->tela[p->linha + limiteBaixo[2] + 1][p->coluna + 2] == '.') || limiteBaixo[2] == -1 )){
-            moverPeca(p, t, descecont, limiteBaixo, limiteEsq);
+            moverPeca(p, t, descecont, limiteBaixo, limiteEsq, limiteDir);
             descerPeca(p, t, descecont, limiteBaixo);
             imprimirTela(t, 1);
         }
